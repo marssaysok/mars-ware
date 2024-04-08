@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Webpage</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            padding: 0;
+        }
+        .logo-container {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+        }
+        .logo-container img {
+            width: 100px; /* Adjust the width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .title-border {
+            border-top: 1px solid white; /* Adjust the thickness and color of the border */
+            width: 85%;
+            position: fixed;
+            top: 120px; /* Adjust the distance from the top */
+            left: 7.6%; /* Adjust the distance from the left */
+            z-index: 999; /* Ensure the border is above other elements */
+        }
+        .menu-link {
+            position: fixed;
+            top: 19px; /* Adjust the distance from the top */
+            left: 1.5%; /* Adjust the distance from the left */
+            z-index: 1000; /* Ensure the link is above the border */
+        }
+        .dropdown-menu {
+            display: none;
+            position: fixed;
+            top: 90px; /* Adjust the distance from the top */
+            left: 1.7%; /* Adjust the distance from the left */
+            background-color: rgb(255, 255, 255);
+            padding: 10px;
+            z-index: 1000; /* Ensure the menu is above the border */
+            border-radius: 10px; /* Adjust the value to control the roundness */
+        }
+        .dropdown-menu button {
+            display: block;
+            background-color: transparent;
+            border: none;
+            color: rgb(0, 0, 0);
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 5px;
+        }
+        .page-title {
+            position: fixed;
+            top: 40px; /* Adjust the distance from the top */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+            color: white; /* Customize the color */
+            font-family: Cabin, sans-serif; /* Customize the font */
+            font-size: 50px; /* Customize the font size */
+            z-index: 1000; /* Ensure the title is above the border */
+        }
+        .frame {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1111px;
+            height: 295px;
+            border: 2px solid white; /* Adjust the border properties */
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Fade transition */
+            z-index: 1000; /* Ensure the frame is above other elements */
+        }
+        .inner-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Cabin, sans-serif; /* Customize the font */
+            font-size: 60px; /* Customize the font size */
+            opacity: 0;
+            transition: opacity 0.5s ease; /* Fade transition */
+        }
+    </style>
+</head>
+<body>
+    <div class="title-border"></div>
+    <div class="page-title">Mar's Creations</div>
+    <a href="#" class="menu-link" onclick="toggleDropdown()">
+        <img src="https://cdn.discordapp.com/attachments/1224236487323680872/1225781551250407545/588a6507d06f6719692a2d15_1.png?ex=66226107&is=660fec07&hm=2957e1f5143d5dd1b430d0ce58702fb70079005cbb77e08ca1238862ed4c4c7c&" alt="Logo" width="90" height="auto">
+    </a>
+    <div class="dropdown-menu" id="dropdownMenu">
+        <button onclick="showFrame('option1')">Option 1</button>
+        <button onclick="showFrame('option2')">Option 2</button>
+        <button>Option 3</button>
+    </div>
+    <div class="logo-container">
+        <img src="https://cdn.discordapp.com/attachments/1224236487323680872/1225634187823022182/2858-kuromimischief.png?ex=6621d7c9&is=660f62c9&hm=5d92c318047678eeedc3677880572ed46cade498c3b637695a8282ad24f88ed5" alt="Logo">
+    </div>
+    <div class="frame" id="frame">
+        <div class="inner-frame" id="innerFrame">Checking...</div>
+    </div>
+    <script>
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById("dropdownMenu");
+            if (dropdownMenu.style.display === "none" || dropdownMenu.style.display === "") {
+                dropdownMenu.style.display = "block";
+            } else {
+                dropdownMenu.style.display = "none";
+            }
+        }
+
+        function showFrame(option) {
+            var frame = document.getElementById("frame");
+            var innerFrame = document.getElementById("innerFrame");
+
+            if (option === 'option2') {
+                // Fade in frame
+                frame.style.display = "block";
+                setTimeout(function() {
+                    frame.style.opacity = "1";
+                }, 10); // Wait for display to take effect
+                // Fade in inner frame
+                setTimeout(function() {
+                    innerFrame.style.opacity = "1";
+                }, 500); // Duration of transition
+                // Fetch server status
+                fetchServerStatus().then(function(status) {
+                    // Update text based on status
+                    innerFrame.textContent = status;
+                }).catch(function(error) {
+                    // Handle error
+                    console.error('Error fetching server status:', error);
+                    innerFrame.textContent = 'Error';
+                });
+            } else {
+                // Fade out inner frame
+                innerFrame.style.opacity = "0";
+                // Fade out frame
+                setTimeout(function() {
+                    frame.style.opacity = "0";
+                }, 500); // Duration of transition
+                // Hide frame for Option 1 and other options
+                setTimeout(function() {
+                    frame.style.display = "none";
+                }, 1000); // Duration of transition
+            }
+        }
+
+        // Dummy function to simulate fetching server status
+        function fetchServerStatus() {
+            // This is where you would make an actual API call to get the server status
+            // For demonstration purposes, we're just returning a random status
+            var statuses = ['Online', 'Down', 'Offline'];
+            var randomIndex = Math.floor(Math.random() * statuses.length);
+            return Promise.resolve(statuses[randomIndex]);
+        }
+    </script>
+</body>
+</html>
